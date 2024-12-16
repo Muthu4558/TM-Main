@@ -15,7 +15,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/user/${userId}`);
+        const response = await fetch(`https://tm-main-server.onrender.com/api/user/${userId}`);
         const data = await response.json();
 
         if (response.ok) {
