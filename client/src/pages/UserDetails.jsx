@@ -24,7 +24,7 @@ const UserDetails = () => {
           setError(data.message);
         }
       } catch (err) {
-        setError("An error occurred while fetching user data.");
+        setError("An error occurred while fetching user data 123.");
       } finally {
         setLoading(false);
       }
