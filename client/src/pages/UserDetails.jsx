@@ -25,7 +25,6 @@ const UserDetails = () => {
         }
       } catch (err) {
         setError("An error occurred while fetching user data.");
-        console.log(error);
       } finally {
         setLoading(false);
       }
