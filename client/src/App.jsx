@@ -103,7 +103,7 @@ const App = () => {
           <Route path='/todo/:status' element={<Tasks />} />
           <Route path='/overdue/:status' element={<Tasks />} />
           <Route path='/team' element={<Users />} />
-          <Route path="/users/:userId/tasks" element={<UserDetails />} />
+          <Route path="/user/:userId/tasks" element={<UserDetails />} />
           <Route path='/trashed' element={<Trash />} />
           <Route path='/task/:id' element={<TaskDetails />} />
         </Route>
