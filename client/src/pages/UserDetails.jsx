@@ -15,7 +15,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/users/${userId}`);
+        const response = await fetch(`/api/user/${userId}`);
         const data = await response.json();
 
         if (response.ok) {
