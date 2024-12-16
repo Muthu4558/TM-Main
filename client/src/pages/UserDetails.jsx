@@ -15,7 +15,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${process.env.VITE_APP_BASE_URL}/api/user/${userId}`);
+        const response = await fetch(`${process.env.VITE_APP_BASE_URL}/api/users/${userId}`);
         const data = await response.json();
 
         if (response.ok) {
