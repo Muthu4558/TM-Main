@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import { BGS, TASK_TYPE, formatDate } from "../../utils";
 import clsx from "clsx";
@@ -8,9 +8,6 @@ import { useTrashTaskMutation, useUpdateTaskMutation } from "../../redux/slices/
 import TaskDialog from "./TaskDialog";
 import { MdCheckBoxOutlineBlank, MdAccessTime, MdCheckCircle, MdDownload } from "react-icons/md";
 import { useSelector } from "react-redux";
-
-// Dynamically import XLSX to avoid build issues in production
-const XLSX = React.lazy(() => import("xlsx"));
 
 const ICONS1 = {
   todo: <MdCheckBoxOutlineBlank />,
@@ -24,19 +21,29 @@ const Table = ({ tasks = [] }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [taskStage, setTaskStage] = useState("");
-  const [trashtask] = useTrashTaskMutation();
+  const [trashtask, { isLoading }] = useTrashTaskMutation();
   const [updateTask] = useUpdateTaskMutation();
+
   const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
 
   const deleteHandler = async () => {
     try {
       const result = await trashtask({ id: selected, isTrash: "trash" }).unwrap();
-      toast.success(result?.message || "Task moved to trash successfully!");
+
+      toast.success(result?.message || "Task moved to trash successfully!", {
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
+
       setOpenDialog(false);
     } catch (error) {
       console.error(error);
-      toast.error("Error occurred while deleting the task.");
+      toast.error(error?.data?.message || "Error occurred while deleting the task.");
     }
   };
 
@@ -59,32 +66,6 @@ const Table = ({ tasks = [] }) => {
     if (taskStage && task.stage !== taskStage) return false;
     return true;
   });
-
-  // Function to handle CSV download
-  const downloadExcel = async () => {
-    try {
-      const excelData = filteredTasks.map((task) => ({
-        "Task Title": task?.title || "No title",
-        "Assigned Date": formatDate(new Date(task?.createdAt)),
-        "Due Date": formatDate(new Date(task?.date)),
-        Team: task?.team?.map((member) => member.name).join(", "),
-        Status: task?.stage,
-      }));
-
-      // Dynamically load the XLSX library
-      const { utils, writeFile } = await import("xlsx");
-
-      // Create a new workbook and add a worksheet
-      const worksheet = utils.json_to_sheet(excelData);
-      const workbook = utils.book_new();
-      utils.book_append_sheet(workbook, worksheet, "Tasks");
-
-      // Write the Excel file and trigger download
-      writeFile(workbook, "task_list.xlsx");
-    } catch (error) {
-      console.error("Failed to generate Excel file:", error);
-    }
-  };
 
   const TableHeader = () => (
     <thead className="w-full border-b border-gray-300">
@@ -147,7 +128,7 @@ const Table = ({ tasks = [] }) => {
   );
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
       <div className="bg-white px-2 md:px-4 pt-4 pb-9 shadow-md rounded">
         <div className="flex justify-between">
           <div className="flex flex-col sm:flex-row gap-4 items-center mb-4">
@@ -202,17 +183,6 @@ const Table = ({ tasks = [] }) => {
                 Clear
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 mt-5">
-              <div>
-                <button
-                  onClick={downloadExcel}
-                  className="bg-[#229ea6] text-white font-semibold px-4 py-1 rounded flex items-center gap-2"
-                >
-                  <MdDownload />
-                  Download
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -228,13 +198,13 @@ const Table = ({ tasks = [] }) => {
               </tbody>
             </table>
           ) : (
-            <div className="text-center py-4 text-gray-500">No tasks found</div>
+            <p className="text-center text-gray-500 py-4">No tasks match the selected filters.</p>
           )}
         </div>
       </div>
 
       <ConfirmatioDialog open={openDialog} setOpen={setOpenDialog} onClick={deleteHandler} />
-    </Suspense>
+    </>
   );
 };
 
