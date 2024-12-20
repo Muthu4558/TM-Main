@@ -57,8 +57,8 @@ const UserDetails = () => {
         </button>
         <Title title={`${user?.name}'s Tasks`} />
       </div>
-      {tasks && tasks.length > 0 ? (
-        <BoardView tasks={tasks} />
+       {tasks && tasks.length > 0 ? (
+        <Table tasks={tasks} />
       ) : (
         <p>No tasks available for this user.</p>
       )}
