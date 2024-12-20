@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loading from "../components/Loader";
 import Title from "../components/Title";
 import BoardView from "../components/BoardView";
+import TaskTitle from "../components/TaskTitle";
+import Table from "../components/task/Table";
 import { FaArrowLeft } from "react-icons/fa"; // Import an arrow icon
 
 const UserDetails = () => {
@@ -15,7 +17,7 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`https://tm-main-server.onrender.com/api/user/${userId}`);
+        const response = await fetch(`/api/user/${userId}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -57,12 +59,14 @@ const UserDetails = () => {
       </div>
 
       {tasks && tasks.length > 0 ? (
-        <BoardView tasks={tasks} />
+        <Table tasks={tasks} />
       ) : (
         <p>No tasks available for this user.</p>
       )}
     </div>
+    
   );
+
 };
 
 export default UserDetails;
