@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { BGS, TASK_TYPE, formatDate } from "../../utils";
 import clsx from "clsx";
@@ -8,6 +8,9 @@ import { useTrashTaskMutation, useUpdateTaskMutation } from "../../redux/slices/
 import TaskDialog from "./TaskDialog";
 import { MdCheckBoxOutlineBlank, MdAccessTime, MdCheckCircle, MdDownload } from "react-icons/md";
 import { useSelector } from "react-redux";
+
+// Import XLSX directly without dynamic import
+import * as XLSX from "xlsx";
 
 const ICONS1 = {
   todo: <MdCheckBoxOutlineBlank />,
@@ -127,84 +130,116 @@ const Table = ({ tasks = [] }) => {
     </tr>
   );
 
+  // Function to handle CSV download
+  const downloadExcel = async () => {
+    try {
+      const excelData = filteredTasks.map((task) => ({
+        "Task Title": task?.title || "No title",
+        "Assigned Date": formatDate(new Date(task?.createdAt)),
+        "Due Date": formatDate(new Date(task?.date)),
+        Team: task?.team?.map((member) => member.name).join(", "),
+        Status: task?.stage,
+      }));
+
+      // Create a new workbook and add a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks");
+
+      // Write the Excel file and trigger download
+      XLSX.writeFile(workbook, "task_list.xlsx");
+    } catch (error) {
+      console.error("Error generating Excel file:", error);
+      toast.error("Failed to generate Excel file.");
+    }
+  };
+
   return (
-    <>
-      <div className="bg-white px-2 md:px-4 pt-4 pb-9 shadow-md rounded">
-        <div className="flex justify-between">
-          <div className="flex flex-col sm:flex-row gap-4 items-center mb-4">
-            <div>
-              <label htmlFor="startDate" className="block text-sm text-gray-600">Start Date:</label>
-              <input
-                type="date"
-                id="startDate"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
-            <div>
-              <label htmlFor="endDate" className="block text-sm text-gray-600">End Date:</label>
-              <input
-                type="date"
-                id="endDate"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="border border-gray-300 rounded px-2 py-1"
-              />
-            </div>
+    <div className="bg-white px-2 md:px-4 pt-4 pb-9 shadow-md rounded">
+      <div className="flex justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 items-center mb-4">
+          <div>
+            <label htmlFor="startDate" className="block text-sm text-gray-600">Start Date:</label>
+            <input
+              type="date"
+              id="startDate"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="border border-gray-300 rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="endDate" className="block text-sm text-gray-600">End Date:</label>
+            <input
+              type="date"
+              id="endDate"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="border border-gray-300 rounded px-2 py-1"
+            />
+          </div>
+          <button
+            onClick={clearFilters}
+            className="bg-[#229ea6] text-white font-semibold px-4 py-1 mt-5 rounded"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 mt-1">
+          <div>
+            <label htmlFor="taskStage" className="block text-sm text-gray-600">Status Filter:</label>
+            <select
+              id="taskStage"
+              value={taskStage}
+              onChange={(e) => setTaskStage(e.target.value)}
+              className="border border-gray-300 rounded px-2 py-1"
+            >
+              <option value="">All</option>
+              <option value="todo">To-Do</option>
+              <option value="in progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div>
             <button
-              onClick={clearFilters}
+              onClick={clearFilters1}
               className="bg-[#229ea6] text-white font-semibold px-4 py-1 mt-5 rounded"
             >
               Clear
             </button>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 mt-1">
-            <div>
-              <label htmlFor="taskStage" className="block text-sm text-gray-600">Status Filter:</label>
-              <select
-                id="taskStage"
-                value={taskStage}
-                onChange={(e) => setTaskStage(e.target.value)}
-                className="border border-gray-300 rounded px-2 py-1"
-              >
-                <option value="">All</option>
-                <option value="todo">To-Do</option>
-                <option value="in progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 mt-5">
+            {/* Download Button */}
             <div>
               <button
-                onClick={clearFilters1}
-                className="bg-[#229ea6] text-white font-semibold px-4 py-1 mt-5 rounded"
+                onClick={downloadExcel}
+                className="bg-[#229ea6] text-white font-semibold px-4 py-1 rounded flex items-center gap-2"
               >
-                Clear
+                <MdDownload />
+                Download
               </button>
             </div>
           </div>
         </div>
-
-        {/* Task Table */}
-        <div className="overflow-x-auto">
-          {filteredTasks.length > 0 ? (
-            <table className="w-full">
-              <TableHeader />
-              <tbody>
-                {filteredTasks.map((task) => (
-                  <TableRow key={task._id || task.title} task={task} />
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-center text-gray-500 py-4">No tasks match the selected filters.</p>
-          )}
-        </div>
       </div>
 
-      <ConfirmatioDialog open={openDialog} setOpen={setOpenDialog} onClick={deleteHandler} />
-    </>
+      {/* Task Table */}
+      <div className="overflow-x-auto">
+        {filteredTasks.length > 0 ? (
+          <table className="w-full">
+            <TableHeader />
+            <tbody>
+              {filteredTasks.map((task) => (
+                <TableRow key={task._id || task.title} task={task} />
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="text-center text-gray-500 py-4">No tasks match the selected filters.</p>
+        )}
+      </div>
+    </div>
   );
 };
 
