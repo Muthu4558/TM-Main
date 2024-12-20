@@ -12,6 +12,7 @@ import TaskTitle from "../components/TaskTitle";
 import BoardView from "../components/BoardView";
 import AddTask from "../components/task/AddTask";
 import { useGetAllTaskQuery } from "../redux/slices/api/taskApiSlice";
+import Table from "../components/task/Table";
 
 const TABS = [
   // { title: "Board View", icon: <MdGridView /> },
@@ -22,7 +23,6 @@ const TASK_TYPE = {
   todo: "bg-blue-600",
   "in progress": "bg-yellow-600",
   completed: "bg-green-600",
-  overdue: "bg-red-600"
 };
 
 const Tasks = () => {
