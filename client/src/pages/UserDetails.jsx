@@ -58,11 +58,7 @@ const UserDetails = () => {
         <Title title={`${user?.name}'s Tasks`} />
       </div>
 
-      {tasks && tasks.length > 0 ? (
-        <Table tasks={tasks} />
-      ) : (
-        <p>No tasks available for this user.</p>
-      )}
+     
     </div>
     
   );
