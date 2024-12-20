@@ -8,7 +8,6 @@ import { useTrashTaskMutation, useUpdateTaskMutation } from "../../redux/slices/
 import TaskDialog from "./TaskDialog";
 import { MdCheckBoxOutlineBlank, MdAccessTime, MdCheckCircle, MdDownload } from "react-icons/md";
 import { useSelector } from "react-redux";
-import * as XLSX from "xlsx"; // Import xlsx library
 
 const ICONS1 = {
   todo: <MdCheckBoxOutlineBlank />,
@@ -128,25 +127,6 @@ const Table = ({ tasks = [] }) => {
     </tr>
   );
 
-  // Function to handle CSV download
-  const downloadExcel = () => {
-    const excelData = filteredTasks.map((task) => ({
-      "Task Title": task?.title || "No title",
-      "Assigned Date": formatDate(new Date(task?.createdAt)),
-      "Due Date": formatDate(new Date(task?.date)),
-      Team: task?.team?.map((member) => member.name).join(", "),
-      Status: task?.stage,
-    }));
-
-    // Create a new workbook and add a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(excelData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks");
-
-    // Write the Excel file and trigger download
-    XLSX.writeFile(workbook, "task_list.xlsx");
-  };
-
   return (
     <>
       <div className="bg-white px-2 md:px-4 pt-4 pb-9 shadow-md rounded">
@@ -202,18 +182,6 @@ const Table = ({ tasks = [] }) => {
               >
                 Clear
               </button>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 mt-5">
-              {/* Download Button */}
-              <div>
-                <button
-                  onClick={downloadExcel}
-                  className="bg-[#229ea6] text-white font-semibold px-4 py-1 rounded flex items-center gap-2"
-                >
-                  <MdDownload />
-                  Download
-                </button>
-              </div>
             </div>
           </div>
         </div>
