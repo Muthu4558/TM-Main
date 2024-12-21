@@ -20,6 +20,7 @@ const Users = () => {
   const [open, setOpen] = useState(false);
   const [openAction, setOpenAction] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [detailsPopup, setDetailsPopup] = useState({ open: false, details: null });
 
   const { data, isLoading, refetch } = useGetTeamListQuery();
   const [deleteUser] = useDeleteUserMutation();
@@ -150,7 +151,7 @@ const Users = () => {
   const navigate = useNavigate();
 
   const handleViewClick = (e, selectedUserId) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
 
     if (!user?.isAdmin) {
       toast.error("Only admins can view user tasks.", {
@@ -167,14 +168,21 @@ const Users = () => {
     navigate(`/users/${selectedUserId}/tasks`);
   };
 
+  const handleDetailsClick = (e, details) => {
+    e.stopPropagation();
+    setDetailsPopup({ open: true, details });
+  };
+
   const TableHeader = () => (
     <thead className="border-b border-gray-300">
       <tr className="text-black text-left">
         <th className="py-2">Full Name</th>
-        <th className="py-2">Department</th>
+        {/* <th className="py-2">Department</th>
         <th className="py-2">Email</th>
-        <th className="py-2">Role</th>
+        <th className="py-2">Role</th> */}
         <th className="py-2">Active</th>
+        <th className="py-2">Details</th>
+        <th className="py-2">Daily Productivity</th>
       </tr>
     </thead>
   );
@@ -186,7 +194,7 @@ const Users = () => {
         className="border-b border-gray-200 text-gray-600 hover:bg-gray-400/10 cursor-pointer"
       >
         <td className="p-2">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 text-blue-600">
             <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-[#229ea6]">
               <span className="text-xs md:text-sm text-center">
                 {getInitials(user.name)}
@@ -196,14 +204,14 @@ const Users = () => {
           </div>
         </td>
 
-        <td className="p-2">{user.title}</td>
+        {/* <td className="p-2">{user.title}</td>
         <td className="p-2">{user.email || "user.email.com"}</td>
-        <td className="p-2">{user.role}</td>
+        <td className="p-2">{user.role}</td> */}
 
         <td>
           <button
             onClick={(e) => {
-              e.stopPropagation(); 
+              e.stopPropagation();
               userStatusClick(user);
             }}
             className={clsx(
@@ -215,6 +223,23 @@ const Users = () => {
           </button>
         </td>
 
+        <td className="p-2">
+          <Button
+            className="text-blue-600 hover:text-blue-500 font-semibold sm:px-0"
+            label="User Details"
+            type="button"
+            onClick={(e) => handleDetailsClick(e, user)}
+          />
+        </td>
+
+        <td className="p-2">
+          <Button
+            className="text-blue-600 hover:text-blue-500 font-semibold sm:px-0"
+            label="Daily Task"
+            type="button"
+          />
+        </td>
+
         <td className="p-2 flex gap-4 justify-end">
           {user && (
             <>
@@ -223,7 +248,7 @@ const Users = () => {
                 label="Edit"
                 type="button"
                 onClick={(e) => {
-                  e.stopPropagation(); 
+                  e.stopPropagation();
                   editClick(user);
                 }}
               />
@@ -238,8 +263,8 @@ const Users = () => {
                 label="Delete"
                 type="button"
                 onClick={(e) => {
-                  e.stopPropagation(); 
-                  deleteClick(user?._id); 
+                  e.stopPropagation();
+                  deleteClick(user?._id);
                 }}
               />
             </>
@@ -252,6 +277,7 @@ const Users = () => {
   return (
     <>
       <div className="w-full md:px-1 px-0 mb-6">
+        
         <div className="flex items-center justify-between mb-8">
           <Title title="Team Members" />
           {user?.isAdmin && (
@@ -317,9 +343,27 @@ const Users = () => {
         setOpen={setOpenAction}
         onClick={userActionHandler}
       />
+       {detailsPopup.open && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-96 max-w-full transform scale-95 transition-all duration-300 hover:scale-100">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">User Details</h2>
+            <div className="space-y-2 text-gray-600">
+              <p><strong>Name:</strong> {detailsPopup.details?.name || "N/A"}</p>
+              <p><strong>Department:</strong> {detailsPopup.details?.title || "N/A"}</p>
+              <p><strong>Role:</strong> {detailsPopup.details?.role || "N/A"}</p>
+              <p><strong>Email:</strong> {detailsPopup.details?.email || "N/A"}</p>
+            </div>
+            <Button
+              label="Close"
+              className="mt-6 w-full py-2 px-4 bg-[#229ea6] text-white font-semibold rounded-md shadow-md transition-all"
+              onClick={() => setDetailsPopup({ open: false, details: null })}
+            />
+          </div>
+        </div>
+      )}
+
     </>
   );
 };
-
 
 export default Users;
