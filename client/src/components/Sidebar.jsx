@@ -5,6 +5,7 @@ import {
   MdSettings,
   MdTaskAlt,
   MdOutlineAlarm,
+  MdOutlineAssessment
 } from "react-icons/md";
 import { FaTasks, FaTrashAlt, FaUsers } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +44,11 @@ const linkData = [
     label: "Overdue",
     link: "overdue/overdue",
     icon: <MdOutlineAlarm />,
+  },
+   {
+    label: "Daily Report",
+    link: "dailyreport",
+    icon: <MdOutlineAssessment />,
   },
   {
     label: "Team",
