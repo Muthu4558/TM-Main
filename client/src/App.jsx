@@ -16,6 +16,7 @@ import Navbar from './components/Navbar.jsx';
 import { setOpenSidebar } from "./redux/slices/authSlice";
 import UserDetails from './pages/UserDetails.jsx'; // Adjust the path based on your folder structure
 import DailyReport from './pages/DailyReport.jsx';
+import UserReports from './pages/UserReports.jsx';
 
 function Layout() {
   const { user } = useSelector((state) => state.auth);
@@ -104,6 +105,7 @@ const App = () => {
           <Route path='/overdue/:status' element={<Tasks />} />
           <Route path='/team' element={<Users />} />
           <Route path='/dailyreport' element={<DailyReport />} />
+          <Route path="/users/:userId/reports" element={<UserReports />} />
           <Route path="/users/:userId/tasks" element={<UserDetails />} />
           <Route path='/trashed' element={<Trash />} />
           <Route path='/task/:id' element={<TaskDetails />} />
