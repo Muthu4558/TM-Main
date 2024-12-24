@@ -20,8 +20,8 @@ const UserReports = () => {
         const response = await axios.get(`https://tm-main-server.onrender.com/api/daily-reports/${userId}`);
         setReports(response.data);
       } catch (error) {
-        // console.error('Error fetching reports:', error.response?.data || error.message);
-        // setError('Error fetching reports.');
+        console.error('Error fetching reports:', error.response?.data || error.message);
+        setError('Error fetching reports.');
       }
     };
 
