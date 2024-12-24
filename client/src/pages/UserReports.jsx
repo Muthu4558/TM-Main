@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowLeft } from "react-icons/fa";
 import Title from "../components/Title";
+import { toast } from "sonner"; 
 import * as XLSX from 'xlsx';
 
 const UserReports = () => {
@@ -19,31 +20,52 @@ const UserReports = () => {
         const response = await axios.get(`https://tm-main-server.onrender.com/api/daily-reports/${userId}`);
         setReports(response.data);
       } catch (error) {
-        console.error('Error fetching reports:', error.response?.data || error.message);
-        setError('Error fetching reports.');
+        // console.error('Error fetching reports:', error.response?.data || error.message);
+        // setError('Error fetching reports.');
       }
     };
 
     fetchReports();
   }, [userId]);
 
-  // Handle remark submission
-  const handleRemarkSubmit = async (reportId, remark) => {
-    try {
-      // Update the remark in the backend
-      await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${reportId}`, { remark });
+// Handle remark submission
+const handleRemarkSubmit = async (reportId, remark) => {
+  try {
+    // Update the remark in the backend
+    await axios.put(`http://localhost:5000/api/daily-reports/${reportId}`, { remark });
 
-      // Optimistically update the report in the UI
-      setReports((prevReports) =>
-        prevReports.map((report) =>
-          report._id === reportId ? { ...report, remark } : report
-        )
-      );
-    } catch (error) {
-      console.error('Error updating remark:', error.response?.data || error.message);
-      setError('Error updating remark.');
-    }
-  };
+    // Optimistically update the report in the UI
+    setReports((prevReports) =>
+      prevReports.map((report) =>
+        report._id === reportId ? { ...report, remark } : report
+      )
+    );
+
+    // Show success toast
+    toast.success("Remark submitted successfully!", {
+      style: {
+        backgroundColor: "#4caf50",
+        color: "#fff",
+        fontSize: "16px",
+        padding: "10px",
+      },
+    });
+  } catch (error) {
+    console.error('Error updating remark:', error.response?.data || error.message);
+    setError('Error updating remark.');
+
+    // Show error toast
+    toast.error("Error submitting remark. Please try again.", {
+      style: {
+        backgroundColor: "#f44336",
+        color: "#fff",
+        fontSize: "16px",
+        padding: "10px",
+      },
+    });
+  }
+};
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -99,7 +121,7 @@ const UserReports = () => {
           <FaArrowLeft />
         </button>
         {/* <h1 className='text-2xl'>User report</h1> */}
-        <Title title={`${user?.name}'s Tasks`} />
+        <Title title={`${user?.name}'s Reports`} />
 
       </div>
 
