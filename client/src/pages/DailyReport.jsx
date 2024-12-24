@@ -13,7 +13,7 @@ const DailyReport = () => {
   // Fetch reports from the database
   const fetchReports = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/daily-reports/${user._id}`);
+      const response = await axios.get(`https://tm-main-server.onrender.com/api/daily-reports/${user._id}`);
       setReports(response.data);
     } catch (error) {
       console.error("Error fetching reports:", error.response?.data || error.message);
@@ -30,7 +30,7 @@ const DailyReport = () => {
         // Update the existing report with content and remark
         try {
           const updatedReport = { content, remark: editingReport.remark };  // Keep the existing remark if updating
-          await axios.put(`http://localhost:5000/api/daily-reports/${editingReport._id}`, updatedReport);
+          await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${editingReport._id}`, updatedReport);
 
           setReports((prevReports) =>
             prevReports.map((report) =>
@@ -55,7 +55,7 @@ const DailyReport = () => {
             remark: "" // Empty remark for new report
           };
 
-          await axios.post("http://localhost:5000/api/daily-reports", newReport);
+          await axios.post("https://tm-main-server.onrender.com/api/daily-reports", newReport);
           setContent(""); // Clear the textarea
           fetchReports(); // Fetch updated reports
         } catch (error) {
