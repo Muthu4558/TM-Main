@@ -16,7 +16,7 @@ const UserReports = () => {
     // Fetch reports for the specific user
     const fetchReports = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/daily-reports/${userId}`);
+        const response = await axios.get(`https://tm-main-server.onrender.com/api/daily-reports/${userId}`);
         setReports(response.data);
       } catch (error) {
         console.error('Error fetching reports:', error.response?.data || error.message);
@@ -31,7 +31,7 @@ const UserReports = () => {
   const handleRemarkSubmit = async (reportId, remark) => {
     try {
       // Update the remark in the backend
-      await axios.put(`http://localhost:5000/api/daily-reports/${reportId}`, { remark });
+      await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${reportId}`, { remark });
 
       // Optimistically update the report in the UI
       setReports((prevReports) =>
