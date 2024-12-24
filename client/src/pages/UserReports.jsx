@@ -32,7 +32,7 @@ const UserReports = () => {
 const handleRemarkSubmit = async (reportId, remark) => {
   try {
     // Update the remark in the backend
-    await axios.put(`http://localhost:5000/api/daily-reports/${reportId}`, { remark });
+    await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${reportId}`, { remark });
 
     // Optimistically update the report in the UI
     setReports((prevReports) =>
