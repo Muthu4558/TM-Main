@@ -150,6 +150,26 @@ const Users = () => {
 
   const navigate = useNavigate();
 
+  const handleViewClicks = (e, selectedUserId) => {
+    e.stopPropagation();
+
+    if (!user?.isAdmin) {
+      toast.error("Only admins can view user tasks.", {
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
+      return;
+    }
+
+    // Admins can view the report
+    navigate(`/users/${selectedUserId}/reports`);
+  };
+
+
   const handleViewClick = (e, selectedUserId) => {
     e.stopPropagation();
 
@@ -233,13 +253,13 @@ const Users = () => {
         </td>
 
         <td className="p-2">
-          <Button
-            className="text-blue-600 hover:text-blue-500 font-semibold sm:px-0"
-            label="Daily Task"
-            type="button"
-          />
-        </td>
-
+        <Button
+          className="text-blue-600 hover:text-blue-500 font-semibold sm:px-0"
+          label="Daily Report"
+          type="button"
+          onClick={(e) => handleViewClicks(e, user._id)} // Button to navigate
+        />
+      </td>
         <td className="p-2 flex gap-4 justify-end">
           {user && (
             <>
