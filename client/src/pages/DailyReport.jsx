@@ -83,7 +83,7 @@ const DailyReport = () => {
   // Handle status update
   const handleStatusChange = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/daily-reports/${id}`, { status });
+      await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${id}`, { status });
       setReports((prevReports) =>
         prevReports.map((report) => (report._id === id ? { ...report, status } : report))
       );
