@@ -96,7 +96,7 @@ const DailyReport = () => {
   // Handle delete report
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/daily-reports/${id}`);
+      await axios.delete(`https://tm-main-client.onrender.com/api/daily-reports/${id}`);
       setReports((prevReports) => prevReports.filter((report) => report._id !== id));
     } catch (error) {
       console.error("Error deleting report:", error.response?.data || error.message);
