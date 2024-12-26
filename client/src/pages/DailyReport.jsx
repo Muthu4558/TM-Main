@@ -125,7 +125,6 @@ const DailyReport = () => {
           padding: "10px",
         },
       });
-      );
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       setError("Error updating status.");
