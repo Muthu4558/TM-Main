@@ -37,7 +37,7 @@ const handleRemarkSubmit = async (reportId, remark) => {
     // Optimistically update the report in the UI
     setReports((prevReports) =>
       prevReports.map((report) =>
-        report._id === reportId ? { ...report, remark, newRemark: ""  } : report
+        report._id === reportId ? { ...report, remark } : report
       )
     );
 
