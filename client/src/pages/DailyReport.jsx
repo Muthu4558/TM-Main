@@ -116,6 +116,7 @@ const DailyReport = () => {
       await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${id}`, { status });
       setReports((prevReports) =>
         prevReports.map((report) => (report._id === id ? { ...report, status } : report))
+        );
         toast.success("Status updated successfully!",{
         style: {
           backgroundColor: "#4caf50",
