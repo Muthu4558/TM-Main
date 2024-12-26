@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import { Toaster } from "react-hot-toast";
 
 const DailyReport = () => {
   const [content, setContent] = useState("");
@@ -38,11 +40,21 @@ const DailyReport = () => {
             )
           );
 
+          toast.success("Report successfully added", {
+            style: {
+              backgroundColor: "#4caf50",
+              color: "#fff",
+              fontSize: "16px",
+              padding: "10px",
+            },
+          });
+
           setEditingReport(null); // Exit editing mode
           setContent(""); // Clear the textarea
         } catch (error) {
           console.error("Error updating report:", error.response?.data || error.message);
           setError("Error updating report.");
+          toast.error("Failed to update report.");
         }
       } else {
         // Create a new report with content and no remark initially
@@ -58,9 +70,18 @@ const DailyReport = () => {
           await axios.post("https://tm-main-server.onrender.com/api/daily-reports", newReport);
           setContent(""); // Clear the textarea
           fetchReports(); // Fetch updated reports
+          toast.success("Report submitted successfully!", {
+            style: {
+              backgroundColor: "#4caf50",
+              color: "#fff",
+              fontSize: "16px",
+              padding: "10px",
+            },
+          });
         } catch (error) {
           console.error("Error submitting report:", error.response?.data || error.message);
           setError("Error submitting report.");
+          toast.error("Failed to submit report.");
         }
       }
     }
@@ -72,12 +93,21 @@ const DailyReport = () => {
   const handleEdit = (report) => {
     setEditingReport(report); // Set the report to edit
     setContent(report.content); // Set the textarea content to the report content
+     toast.info("Editing report...", {
+      style: {
+        backgroundColor: "#2196f3",
+        color: "#fff",
+        fontSize: "16px",
+        padding: "10px",
+      },
+    });
   };
 
   // Handle cancel edit
   const handleCancelEdit = () => {
     setEditingReport(null); // Exit editing mode
     setContent(""); // Clear the textarea
+     toast.dismiss();
   };
 
   // Handle status update
@@ -86,10 +116,19 @@ const DailyReport = () => {
       await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${id}`, { status });
       setReports((prevReports) =>
         prevReports.map((report) => (report._id === id ? { ...report, status } : report))
+        toast.success("Status updated successfully!",{
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
       );
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       setError("Error updating status.");
+      toast.error("Failed to update status.");
     }
   };
 
@@ -98,9 +137,18 @@ const DailyReport = () => {
     try {
       await axios.delete(`https://tm-main-client.onrender.com/api/daily-reports/${id}`);
       setReports((prevReports) => prevReports.filter((report) => report._id !== id));
+      toast.success("Report deleted successfully!", {
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px"
+        },
+      });
     } catch (error) {
       console.error("Error deleting report:", error.response?.data || error.message);
       setError("Error deleting report.");
+      toast.error("Failed to delete report.");
     }
   };
 
