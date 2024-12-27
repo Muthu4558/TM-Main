@@ -11,6 +11,10 @@ import { useDeleteUserMutation, useGetTeamListQuery, useUserActionMutation } fro
 import { toast } from "sonner";
 import { MdOutlineSearch } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { BiEditAlt } from "react-icons/bi";
+import { FaEye } from "react-icons/fa";
+import { MdDelete } from "react-icons/md"
+
 
 const Users = () => {
   const { user } = useSelector((state) => state.auth);
@@ -169,7 +173,6 @@ const Users = () => {
     navigate(`/users/${selectedUserId}/reports`);
   };
 
-
   const handleViewClick = (e, selectedUserId) => {
     e.stopPropagation();
 
@@ -196,13 +199,11 @@ const Users = () => {
   const TableHeader = () => (
     <thead className="border-b border-gray-300">
       <tr className="text-black text-left">
-        <th className="py-2">Full Name</th>
-        {/* <th className="py-2">Department</th>
-        <th className="py-2">Email</th>
-        <th className="py-2">Role</th> */}
+        <th className="py-2r">Full Name</th>
         <th className="py-2">Active</th>
-        <th className="py-2">Details</th>
+        <th className="py-2">Detail</th>
         <th className="py-2">Daily Productivity</th>
+        <th className="py-2 flex justify-end">Action</th>
       </tr>
     </thead>
   );
@@ -223,10 +224,6 @@ const Users = () => {
             {user.name}
           </div>
         </td>
-
-        {/* <td className="p-2">{user.title}</td>
-        <td className="p-2">{user.email || "user.email.com"}</td>
-        <td className="p-2">{user.role}</td> */}
 
         <td>
           <button
@@ -259,37 +256,41 @@ const Users = () => {
           type="button"
           onClick={(e) => handleViewClicks(e, user._id)} // Button to navigate
         />
-      </td>
-        <td className="p-2 flex gap-4 justify-end">
-          {user && (
-            <>
-              <Button
-                className="text-blue-600 hover:text-blue-500 font-semibold sm:px-0"
-                label="Edit"
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  editClick(user);
-                }}
-              />
-              <Button
-                className="text-green-600 hover:text-green-500 font-semibold sm:px-0"
-                label="View"
-                type="button"
-                onClick={(e) => handleViewClick(e, user._id)}
-              />
-              <Button
-                className="text-red-700 hover:text-red-500 font-semibold sm:px-0"
-                label="Delete"
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteClick(user?._id);
-                }}
-              />
-            </>
-          )}
         </td>
+
+        <td className="p-2 flex gap-4 justify-end">
+  {user && (
+    <>
+      <button
+        className="text-blue-600 hover:text-blue-500"
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          editClick(user);
+        }}
+      >
+        <BiEditAlt size={20} />
+      </button>
+      <button
+        className="text-green-600 hover:text-green-500"
+        type="button"
+        onClick={(e) => handleViewClick(e, user._id)}
+      >
+        <FaEye size={20} />
+      </button>
+      <button
+        className="text-red-700 hover:text-red-500"
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteClick(user?._id);
+        }}
+      >
+        <MdDelete size={20} />
+      </button>
+    </>
+  )}
+</td>
       </tr>
     );
   };
