@@ -72,7 +72,7 @@ const MobileSidebar = () => {
           onClick={closeSidebar}
         >
           <div className='bg-white w-3/4 h-full'>
-            <div className='w-full flex justify-end px-5 mt-5'>
+            <div className='w-full flex justify-end px-5'>
               <button
                 onClick={closeSidebar}
                 className='flex justify-end items-end mt-5'
