@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import { Toaster } from "react-hot-toast";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md"
@@ -56,7 +55,6 @@ const DailyReport = () => {
         } catch (error) {
           console.error("Error updating report:", error.response?.data || error.message);
           setError("Error updating report.");
-          toast.error("Failed to update report.");
         }
       } else {
         try {
@@ -81,7 +79,6 @@ const DailyReport = () => {
         } catch (error) {
           console.error("Error submitting report:", error.response?.data || error.message);
           setError("Error submitting report.");
-          toast.error("Failed to submit report.");
         }
       }
     }
@@ -115,7 +112,6 @@ const DailyReport = () => {
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       setError("Error updating status.");
-      toast.error("Failed to update status.");
     }
   };
 
@@ -133,7 +129,6 @@ const DailyReport = () => {
     } catch (error) {
       console.error("Error deleting report:", error.response?.data || error.message);
       setError("Error deleting report.");
-      toast.error("Failed to delete report.");
     }
   };
 
