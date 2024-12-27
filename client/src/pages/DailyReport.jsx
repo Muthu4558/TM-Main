@@ -49,7 +49,7 @@ const DailyReport = () => {
           color: "#fff",
           fontSize: "16px",
           padding: "10px",
-        },);
+        },});
           setEditingReport(null);
           setContent("");
         } catch (error) {
@@ -76,7 +76,7 @@ const DailyReport = () => {
           color: "#fff",
           fontSize: "16px",
           padding: "10px",
-        },);
+        },});
         } catch (error) {
           console.error("Error submitting report:", error.response?.data || error.message);
           setError("Error submitting report.");
@@ -110,7 +110,7 @@ const DailyReport = () => {
           color: "#fff",
           fontSize: "16px",
           padding: "10px",
-        },);
+        },});
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       setError("Error updating status.");
@@ -128,7 +128,7 @@ const DailyReport = () => {
           color: "#fff",
           fontSize: "16px",
           padding: "10px",
-        },);
+        },});
     } catch (error) {
       console.error("Error deleting report:", error.response?.data || error.message);
       setError("Error deleting report.");
