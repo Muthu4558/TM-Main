@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowLeft } from "react-icons/fa";
 import Title from "../components/Title";
-import { toast } from "sonner"; 
+import { toast } from "sonner";
 import * as XLSX from 'xlsx';
 
 const UserReports = () => {
@@ -14,11 +14,13 @@ const UserReports = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch reports for the specific user
     const fetchReports = async () => {
       try {
         const response = await axios.get(`https://tm-main-server.onrender.com/api/daily-reports/${userId}`);
-        setReports(response.data);
+        const sortedReports = response.data.sort((a, b) =>
+          new Date(b.createdAt || b.dateTime) - new Date(a.createdAt || a.dateTime)
+        );
+        setReports(sortedReports);
       } catch (error) {
         console.error('Error fetching reports:', error.response?.data || error.message);
         setError('Error fetching reports.');
@@ -28,44 +30,39 @@ const UserReports = () => {
     fetchReports();
   }, [userId]);
 
-// Handle remark submission
-const handleRemarkSubmit = async (reportId, remark) => {
-  try {
-    // Update the remark in the backend
-    await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${reportId}`, { remark });
+  const handleRemarkSubmit = async (reportId, remark) => {
+    try {
+      await axios.put(`https://tm-main-server.onrender.com/api/daily-reports/${reportId}`, { remark });
 
-    // Optimistically update the report in the UI
-    setReports((prevReports) =>
-      prevReports.map((report) =>
-        report._id === reportId ? { ...report, remark, newRemark: "" } : report
-      )
-    );
-
-    // Show success toast
-    toast.success("Remark submitted successfully!", {
-      style: {
-        backgroundColor: "#4caf50",
-        color: "#fff",
-        fontSize: "16px",
-        padding: "10px",
-      },
-    });
-  } catch (error) {
-    console.error('Error updating remark:', error.response?.data || error.message);
-    setError('Error updating remark.');
-
-    // Show error toast
-    toast.error("Error submitting remark. Please try again.", {
-      style: {
-        backgroundColor: "#f44336",
-        color: "#fff",
-        fontSize: "16px",
-        padding: "10px",
-      },
-    });
-  }
-};
-
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report._id === reportId ? { ...report, remark, newRemark: ""  } : report
+        )
+      );
+  
+      toast.success("Remark submitted successfully!", {
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
+    } catch (error) {
+      console.error('Error updating remark:', error.response?.data || error.message);
+      setError('Error updating remark.');
+  
+      toast.error("Error submitting remark. Please try again.", {
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
+    }
+  };
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -139,11 +136,12 @@ const handleRemarkSubmit = async (reportId, remark) => {
 
         {reports.length > 0 ? (
           <div className="overflow-x-auto shadow-md rounded-lg">
-            <table className="min-w-full table-auto border-collapse text-sm bg-white">
+            <table className="min-w-full table-auto border-collapse bg-white">
               <thead>
-                <tr className="bg-[#f3f4f6] text-gray-700">
+                <tr className="bg-[#f3f4f6] text-gray-700 font-extrabold">
                   <th className="border px-4 py-3 text-left font-medium">S.no</th>
                   <th className="border px-4 py-3 text-left font-medium">Report</th>
+                  <th className="border px-4 py-3 text-left font-medium">Attachment</th>
                   <th className="border px-4 py-3 text-left font-medium">Date & Time</th>
                   <th className="border px-4 py-3 text-left font-medium">Status</th>
                   <th className="border px-4 py-3 text-left font-medium">Remark</th>
@@ -160,6 +158,7 @@ const handleRemarkSubmit = async (reportId, remark) => {
                     <td className="border px-4 py-3 text-gray-700 break-words">
                       {report.content}
                     </td>
+                    <td className="border px-4 py-3">No Attachment</td>
                     <td className="border px-4 py-3 text-gray-700">
                       {new Date(report.createdAt || report.dateTime).toLocaleString()}
                     </td>
