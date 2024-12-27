@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import { Toaster } from "react-hot-toast";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md"
