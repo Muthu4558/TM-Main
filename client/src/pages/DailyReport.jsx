@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import { Toaster } from "react-hot-toast";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md"
@@ -44,7 +43,13 @@ const DailyReport = () => {
             )
           );
 
-          toast.success("Report successfully updated!");
+          toast.success("Report successfully updated!",{
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },);
           setEditingReport(null);
           setContent("");
         } catch (error) {
@@ -65,7 +70,13 @@ const DailyReport = () => {
           await axios.post("https://tm-main-server.onrender.com/api/daily-reports", newReport);
           setContent("");
           fetchReports();
-          toast.success("Report submitted successfully!");
+          toast.success("Report submitted successfully!",{
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },);
         } catch (error) {
           console.error("Error submitting report:", error.response?.data || error.message);
           setError("Error submitting report.");
@@ -93,7 +104,13 @@ const DailyReport = () => {
       setReports((prevReports) =>
         prevReports.map((report) => (report._id === id ? { ...report, status } : report))
       );
-      toast.success("Status updated successfully!");
+      toast.success("Status updated successfully!",{
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },);
     } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       setError("Error updating status.");
@@ -105,7 +122,13 @@ const DailyReport = () => {
     try {
       await axios.delete(`https://tm-main-server.onrender.com/api/daily-reports/${id}`);
       setReports((prevReports) => prevReports.filter((report) => report._id !== id));
-      toast.success("Report deleted successfully!");
+      toast.success("Report deleted successfully!",{
+        style: {
+          backgroundColor: "#229ea6",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },);
     } catch (error) {
       console.error("Error deleting report:", error.response?.data || error.message);
       setError("Error deleting report.");
