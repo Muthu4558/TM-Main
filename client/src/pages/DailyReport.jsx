@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { toast } from "sonner";
-
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md"
@@ -115,7 +113,6 @@ const DailyReport = () => {
 
   return (
     <div className="p-4">
-      <Toaster position="bottom-right" reverseOrder={false} />
       <h1 className="text-2xl font-bold mb-4">Daily Report</h1>
 
       <div className="bg-white p-5">
