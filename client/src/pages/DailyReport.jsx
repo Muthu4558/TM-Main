@@ -22,7 +22,6 @@ const DailyReport = () => {
         new Date(b.createdAt || b.dateTime) - new Date(a.createdAt || a.dateTime)
       );
       setReports(sortedReports);
-      toast.success("Reports fetched successfully.", { position: "bottom-right" });
     } catch (error) {
       console.error("Error fetching reports:", error.response?.data || error.message);
       setError("Error fetching reports.");
@@ -45,7 +44,14 @@ const DailyReport = () => {
           );
           setEditingReport(null);
           setContent("");
-          toast.success("Report updated successfully.", { position: "bottom-right" });
+          toast.success("Report updated successfully.", { position: "bottom-right" }, {
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
         } catch (error) {
           console.error("Error updating report:", error.response?.data || error.message);
           setError("Error updating report.");
