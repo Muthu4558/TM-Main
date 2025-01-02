@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { setOpenSidebar } from "../redux/slices/authSlice";
 import clsx from "clsx";
-import newlogo1 from "../assets/images/newlogo1.png"
+import Logo from "../assets/images/Logo.png"
 
 const linkData = [
   {
@@ -96,7 +96,7 @@ const Sidebar = () => {
   return (
     <div className='w-ful h-full flex flex-col gap-6 p-5'>
 
-      <img className="w-67 mt-1" src={newlogo1} alt="Nizcare-Logo" />
+      <img className="w-67 mt-1" src={Logo} alt="Nizcare-Logo" />
 
       <div className='flex-1 flex flex-col gap-y-5 py-8'>
         {sidebarLinks.map((link) => (
