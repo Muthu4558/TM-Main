@@ -8,6 +8,7 @@ import { useLoginMutation } from "../redux/slices/api/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { toast } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Logo from "../assets/images/Logo.png"
 
 const Login = () => {
   const { user } = useSelector((state) => state.auth);
@@ -68,10 +69,7 @@ const Login = () => {
             <span className="flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base border-gray-300 text-gray-600">
               Manage all your tasks in one place!
             </span>
-            <p className="flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center text-[#229ea6]">
-              <span>Nizcare</span>
-              <span>Task Management</span>
-            </p>
+            <img  className="w-48 md:w-full" src={Logo} alt="Nizcare-Logo" />
             <div className='cell'>
               <div className='circle rotate-in-up-left'></div>
             </div>
