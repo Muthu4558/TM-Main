@@ -175,7 +175,7 @@ const Dashboard = () => {
       label: "TOTAL TASK",
       total: data?.totalTasks || 0,
       icon: <FaNewspaper />,
-      bg: "bg-violet-600",
+      bg: "bg-blue-600",
       textColor: "text-violet-600",
     },
     {
