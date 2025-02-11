@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { setOpenSidebar } from "../redux/slices/authSlice";
 import clsx from "clsx";
-import Logo from "../assets/images/Logo.png"
+import Logo from "../assets/images/logo2.png";
 
 const linkData = [
   {
