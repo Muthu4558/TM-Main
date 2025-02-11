@@ -14,6 +14,7 @@ import { FaList } from "react-icons/fa";
 import UserInfo from "./UserInfo";
 import { IoMdAdd } from "react-icons/io";
 import AddSubTask from "./task/AddSubTask";
+import { MdAssignment } from 'react-icons/md';
 
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
@@ -43,20 +44,33 @@ const TaskCard = ({ task }) => {
         </div>
 
         <>
-          <div className='flex items-center gap-2'>
-            <div
-              className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task?.stage])}
-            />
-            <h4 className='line-clamp-1 text-black'>{task?.title}</h4>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center my-1">
+                <MdAssignment style={{ marginRight: '10px' }} />
+                <p className="text-blue-700">Task Tittle</p>
+              </div>
+              <div className='flex items-center gap-2 mt-1'>
+                <div
+                  className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task?.stage])}
+                />
+                <h4 className='line-clamp-1 text-black'>{task?.title}</h4>
+              </div>
+
+            </div>
+            <div className="flex flex-col">
+              {/* <span className='text-sm text-gray-600'>
+                Due Date  "{formatDate(new Date(task?.date))}"
+              </span> */}
+              <h4 className="text-red-600">Due Date</h4>
+              <p>{formatDate(new Date(task?.date))}</p>
+            </div>
           </div>
-          <span className='text-sm text-gray-600'>
-            {formatDate(new Date(task?.date))}
-          </span>
         </>
 
         <div className='w-full border-t border-gray-200 my-2' />
         <div className='flex items-center justify-between mb-2'>
-          <div className='flex items-center gap-3'>
+          {/* <div className='flex items-center gap-3'>
             <div className='flex gap-1 items-center text-sm text-gray-600'>
               <BiMessageAltDetail />
               <span>{task?.activities?.length}</span>
@@ -69,7 +83,7 @@ const TaskCard = ({ task }) => {
               <FaList />
               <span>0/{task?.subTasks?.length}</span>
             </div>
-          </div>
+          </div> */}
 
           <div className='flex flex-row-reverse'>
             {task?.team?.map((m, index) => (
@@ -87,12 +101,12 @@ const TaskCard = ({ task }) => {
         </div>
 
         {task?.subTasks?.length > 0 ? (
-          <div className='py-5 border-t border-gray-200'>
+          <div className='py-2 border-t border-gray-200'>
             <h5 className='text-base line-clamp-1 text-black'>
               {task?.subTasks[0].title}
             </h5>
 
-            <div className='p-4 space-x-8'>
+            <div className='py-2 space-x-8'>
               <span className='text-sm text-gray-600'>
                 {formatDate(new Date(task?.subTasks[0]?.date))}
               </span>
@@ -104,7 +118,7 @@ const TaskCard = ({ task }) => {
         ) : (
           <>
             <div className='py-4 border-t border-gray-200'>
-              <span className='text-gray-500'>No More Task</span>
+              {/* <span className='text-gray-500'>No More Task</span> */}
             </div>
           </>
         )}
@@ -112,7 +126,7 @@ const TaskCard = ({ task }) => {
         <div className='w-full pb-2'>
           <button
             onClick={() => setOpen(true)}
-            className='w-full flex gap-4 items-center text-sm text-gray-500 font-semibold disabled:cursor-not-allowed disabled::text-gray-300'
+            className='flex gap-2 px-4 items-center text-sm bg-[#229ea6] rounded-2xl text-white p-2 font-semibold disabled:cursor-not-allowed'
           >
             <IoMdAdd className='text-lg' />
             <span>ADD MORE TASK</span>
