@@ -3,6 +3,9 @@ import User from "../models/user.js"
 import Task from "../models/task.js";
 import { createJWT } from "../config/db.js";
 import nodemailer from 'nodemailer';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Function to send email using nodemailer
 const sendEmail = async (to, subject, text, htmlContent) => {
@@ -51,30 +54,35 @@ export const registerUser = async (req, res) => {
     });
 
     if (user) {
-      isAdmin ? createJWT(res, user._id) : null;
+      if (isAdmin) createJWT(res, user._id);
 
       user.password = undefined;
 
-      // Send registration email
       const emailContent = `
         <h3>Welcome ${name},</h3>
         <p>Your Nizcare Task Management account has been successfully created.</p>
-        <p>We are excited to have you on board. You can now login using your credentials.</p>
+        <p><strong>Login Credentials:</strong></p>
+        <p>Email: <strong>${email}</strong></p>
+        <p>Password: <strong>${password}</strong></p>
+        <p>You can now login using your credentials.</p>
+        <p>https://taskgo.in/</p>
       `;
-      await sendEmail(user.email, "Welcome to Our Platform", "Your account has been created.", emailContent);
+      await sendEmail(
+        user.email,
+        "Welcome to Nizcare Task Management",
+        `Your account has been created. Email: ${email}, Password: ${password}`,
+        emailContent
+      );
 
       res.status(201).json(user);
     } else {
-      return res
-        .status(400)
-        .json({ status: false, message: "Invalid user data" });
+      return res.status(400).json({ status: false, message: "Invalid user data" });
     }
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ status: false, message: error.message });
+    return res.status(500).json({ status: false, message: error.message });
   }
 };
-
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
