@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
+import { Toaster } from "react-hot-toast";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import { toast } from "sonner";
+import { BiUpload } from "react-icons/bi";
 
 const DailyReport = () => {
   const [content, setContent] = useState("");
@@ -42,19 +44,21 @@ const DailyReport = () => {
               report._id === editingReport._id ? { ...report, content } : report
             )
           );
+
+          toast.success("Report successfully updated!", {
+            style: {
+              backgroundColor: "#4caf50",
+              color: "#fff",
+              fontSize: "16px",
+              padding: "10px",
+            },
+          });
           setEditingReport(null);
           setContent("");
-          toast.success("Report updated successfully.", { position: "bottom-right" }, {
-        style: {
-          backgroundColor: "#4caf50",
-          color: "#fff",
-          fontSize: "16px",
-          padding: "10px",
-        },
-      });
         } catch (error) {
           console.error("Error updating report:", error.response?.data || error.message);
           setError("Error updating report.");
+          toast.error("Failed to update report.");
         }
       } else {
         try {
@@ -69,10 +73,18 @@ const DailyReport = () => {
           await axios.post("https://tm-main-server.onrender.com/api/daily-reports", newReport);
           setContent("");
           fetchReports();
-           toast.success("Report submitted successfully.", { position: "bottom-right" });
-          } catch (error) {
+          toast.success("Report submitted successfully!", {
+            style: {
+              backgroundColor: "#4caf50",
+              color: "#fff",
+              fontSize: "16px",
+              padding: "10px",
+            },
+          });
+        } catch (error) {
           console.error("Error submitting report:", error.response?.data || error.message);
           setError("Error submitting report.");
+          toast.error("Failed to submit report.");
         }
       }
     }
@@ -82,12 +94,12 @@ const DailyReport = () => {
     setEditingReport(report);
     setContent(report.content);
     setDropdownVisible(null); // Close dropdown
-    toast.info("Editing report.", { position: "bottom-right" });
   };
 
   const handleCancelEdit = () => {
     setEditingReport(null);
     setContent("");
+    toast.dismiss(); // Dismiss any ongoing toast notifications for editing
   };
 
   const handleStatusChange = async (id, status) => {
@@ -96,10 +108,18 @@ const DailyReport = () => {
       setReports((prevReports) =>
         prevReports.map((report) => (report._id === id ? { ...report, status } : report))
       );
-      toast.success(`Status updated to ${status}.`, { position: "bottom-right" });
-      } catch (error) {
+      toast.success("Status updated successfully!", {
+        style: {
+          backgroundColor: "#4caf50",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
+    } catch (error) {
       console.error("Error updating status:", error.response?.data || error.message);
       setError("Error updating status.");
+      toast.error("Failed to update status.");
     }
   };
 
@@ -107,10 +127,18 @@ const DailyReport = () => {
     try {
       await axios.delete(`https://tm-main-server.onrender.com/api/daily-reports/${id}`);
       setReports((prevReports) => prevReports.filter((report) => report._id !== id));
-       toast.success("Report deleted successfully.", { position: "bottom-right" });
+      toast.success("Report deleted successfully!", {
+        style: {
+          backgroundColor: "#f44336",
+          color: "#fff",
+          fontSize: "16px",
+          padding: "10px",
+        },
+      });
     } catch (error) {
       console.error("Error deleting report:", error.response?.data || error.message);
       setError("Error deleting report.");
+      toast.error("Failed to delete report.");
     }
   };
 
@@ -126,7 +154,8 @@ const DailyReport = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Daily Report</h1>
+      <Toaster position="bottom-right" reverseOrder={false} />
+      <h1 className="text-2xl font-bold mb-4">Daily Task</h1>
 
       <div className="bg-white p-5">
         {error && <p className="text-red-500">{error}</p>}
@@ -151,19 +180,7 @@ const DailyReport = () => {
                 Cancel
               </button>
             )}
-            <label
-              htmlFor="file-upload"
-              className="bg-[#229ea6] text-white px-4 py-2 rounded cursor-pointer inline-block text-center"
-            >
-              Upload File
-              <input
-                id="file-upload"
-                type="file"
-                // onChange={handleFileChange}
-                className="hidden"
-                accept="image/*,application/pdf"
-              />
-            </label>
+
 
           </div>
         </form>
@@ -173,14 +190,14 @@ const DailyReport = () => {
             <div className="overflow-x-auto shadow-md rounded-lg">
               <table className="min-w-full table-auto border-collapse text-sm bg-white">
                 <thead>
-                  <tr className="bg-[#f3f4f6] text-gray-700">
-                    <th className="border px-4 py-3 text-left font-medium">S.no</th>
-                    <th className="border px-4 py-3 text-left font-medium">Report</th>
-                    <th className="border px-4 py-3 text-left font-medium">Attachment</th>
-                    <th className="border px-4 py-3 text-left font-medium">Date & Time</th>
-                    <th className="border px-4 py-3 text-left font-medium">Status</th>
-                    <th className="border px-4 py-3 text-left font-medium">Action</th>
-                    <th className="border px-4 py-3 text-left font-medium">Remark (From Admin)</th>
+                  <tr className="bg-[#f3f4f6] text-black">
+                    <th className="border px-4 py-3 text-left text-base font-bold">S.no</th>
+                    <th className="border px-4 py-3 text-left text-base font-bold">Report</th>
+                    <th className="border px-4 py-3 text-left text-base font-bold">Attachment</th>
+                    <th className="border px-4 py-3 text-left text-base font-bold">Date & Time</th>
+                    <th className="border px-4 py-3 text-left text-base font-bold">Status</th>
+                    <th className="border px-4 py-3 text-left text-base font-bold">Action</th>
+                    <th className="border px-4 py-3 text-left text-base font-bold">Remark (From Admin)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -218,6 +235,19 @@ const DailyReport = () => {
                           </button>
                           {dropdownVisible === report._id && (
                             <div className="absolute right-0 mt-2 bg-white border shadow-lg rounded-md z-10">
+                              <label
+                                htmlFor="file-upload"
+                                className="flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                              >
+                                <BiUpload size={20} /> Upload
+                                <input
+                                  id="file-upload"
+                                  type="file"
+                                  // onChange={handleFileChange}
+                                  className="hidden"
+                                  accept="image/*,application/pdf"
+                                />
+                              </label>
                               <button
                                 onClick={() => handleEdit(report)}
                                 className="flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
