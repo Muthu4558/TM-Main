@@ -108,7 +108,11 @@ const Tasks = () => {
             {/* <TaskTitle label="Overdue" className={TASK_TYPE.overdue} /> */}
           </div>
         )}
-        <BoardView tasks={filteredTasks} />
+        {filteredTasks.length > 0 ? (
+              <BoardView tasks={filteredTasks} />
+            ) : (
+              <p className="text-center text-gray-500 mt-4 font-bold text-2xl">No tasks yet.</p>
+        )}
       </Tabs>
 
       <AddTask open={open} setOpen={setOpen} />
