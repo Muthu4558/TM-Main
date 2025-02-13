@@ -244,7 +244,7 @@ const DailyReport = () => {
               </table>
             </div>
           ) : (
-            <p className="text-gray-500 text-sm mt-4">No task is updated.</p>
+            <p className="text-gray-500 text-xl mt-4 font-bold">No task is updated.</p>
           )}
         </div>
       </div>
